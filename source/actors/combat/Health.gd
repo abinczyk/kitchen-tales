@@ -4,33 +4,33 @@ signal changed(new_health)
 signal died
 
 
-var _current = max_health setget set_current
+var current = max_health setget set_current, get_current
 
 export (int) var max_health = 10
 
-var invulnerable = false
-
 func _ready():
-	set_current(max_health)
+	self.current = max_health
 
 
 func set_current(new_value):
-	_current = max(0, new_value)
-	emit_signal("changed", _current)
+	current = max(0, new_value)
+	emit_signal("changed", current)
 	is_dead()
 
 
+func get_current():
+	return current
+
+
 func damage(amount):
-	if invulnerable:
-		return
-	set_current(_current - amount)
+	set_current(current - amount)
 
 
 func heal(amount):
-	set_current(_current + amount)
+	set_current(current + amount)
 
 
 func is_dead():
-	if _current == 0:
+	if current == 0:
 		emit_signal("died")
-	return _current == 0
+	return current == 0

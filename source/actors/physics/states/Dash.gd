@@ -1,19 +1,25 @@
 extends "res://actors/physics/State.gd"
 
+func _enter():
+	actor.velocity.y = 0.0
+
+
 func _on_command_started(command):
-	var state_based_on_move = "Move" if is_moving else "Idle"
 	match command:
 		"Stop":
-			get_parent().change_state_to(state_based_on_move)
+			state_machine.change_state_to("Idle")
 		"Bump":
-			get_parent().change_state_to(state_based_on_move)
+			state_machine.change_state_to("Idle")
 		"Jump":
-			get_parent().change_state_to("DashJump")
+			state_machine.change_state_to("DashJump")
 		"DistanceStop":
-			get_parent().change_state_to(state_based_on_move)
+			state_machine.change_state_to("Idle")
 
 
 func _on_command_finished(command):
 	match command:
 		"Jump":
-			get_parent().change_state_to("DashJumpFall")
+			state_machine.change_state_to("DashJumpFall")
+		"Dash":
+			state_machine.change_state_to("Idle")
+			

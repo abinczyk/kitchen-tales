@@ -11,7 +11,8 @@ func execute():
 
 
 func set_direction(new_direction):
-	direction = new_direction
+	if not new_direction == Vector2.ZERO:
+		direction = new_direction
 
 
 func cancel():

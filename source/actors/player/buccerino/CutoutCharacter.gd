@@ -1,27 +1,23 @@
 extends Position2D
 
+signal look_direction_changed(new_direction)
 var look_direction = 1 setget set_look_direction
+
+onready var animator = $AnimationPlayer
+onready var pivot = $Pivot
+onready var remote_transform = $Pivot/Body/ArmLeft/RemoteTransform2D
 
 func set_look_direction(value):
 	look_direction = value
 	scale.x = abs(scale.x) * look_direction
+	emit_signal("look_direction_changed", look_direction)
 
 
 func play(animation):
 	var blend = -1
-	if $AnimationPlayer.current_animation == "spin":
+	if animator.current_animation == "spin":
 		blend = 0.0
 		if animation == "fall":
 			return
-	if $AnimationPlayer.has_animation(animation):
-		$AnimationPlayer.play(animation, blend)
-
-
-func _on_AnimationPlayer_animation_started(anim_name):
-	if anim_name == "wall":
-		$Pivot.scale.x = -1.0
-	else:
-		$Pivot.scale.x = 1.0
-	if anim_name == "charge":
-		$Pivot/Body/ArmLeft/RemoteTransform2D.update_position = true
-		$Pivot/Body/ArmLeft/RemoteTransform2D.update_rotation = true
+	if animator.has_animation(animation):
+		animator.play(animation, blend)
